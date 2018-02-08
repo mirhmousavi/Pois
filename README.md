@@ -1,5 +1,5 @@
 # Pois
-a Python wrapper for linux whois that return authentic domain information (not abuse)
+a Python whois utility using sockets
 
 
 
@@ -7,18 +7,28 @@ a Python wrapper for linux whois that return authentic domain information (not a
 ## Why use Pois over other libraries?
 
 
-
-1. when you whois a gtld like com you get a thin whois means no contact information will be returned, for get that information and get a thick whois you should whois domain with 
-Registrar whois server, some whois clients in linux do it automatically but some won't<br>
-Pois parse whois result and if found a Registrar whois server entry it will re-whois domain with that server
-so you always get authentic result not abuse ones.
-
-2. Pois use all whois servers of all available tld so it whois domain with tld specific whois server (worth mention that linux whois utility is lack of get whois of new tld like .rocks)
-
-3. Pois return result in raw and nomalized format, in the latter you a get a clean dict of whois result.
+so why use Pois over robust libraris like (pythonwhois)[https://github.com/joepie91/python-whois],(pywhois)[https://bitbucket.org/richardpenman/pywhois]...
 
 
-4. not enogh!
+1. Pois use all whois servers of all available tld so it whois domain with tld specific whois server (worth mention that linux whois utility is lack of get whois of new tld like .rocks)
+
+
+2. Pois knows when a domain is available or not so if you whois an unregistered domain
+ you get DomainNotFoundError (this come from parsing major whois servers reponse for an unvalid domain)
+
+
+3.You can specify a timeout for whois operation, some whois servers after user quota exceeded for get whois just don't return
+anything and won't close the connection.
+
+
+4.Pois parse result and if found a Registrar whois server re-whois that server to get complete whois (thick whois).
+
+
+5. Pois use sockets so it's portable
+
+
+6. Pois return result in raw and nomalized format, in the latter you a get a clean dict of whois result.
+
 
 
 * tld whois severs provided from [weppos/whois](https://github.com/weppos/whois/)
@@ -34,38 +44,10 @@ so you always get authentic result not abuse ones.
 ```python
 
 from pois import Pois
-Pois.check_whois_is_installed()
-result = Pois.fetch_whois('github.com')
-print(result['raw'], ['normalized'])
-
-```
-
-
-
-you can pass timeout (in second) and whois_server, if whois_server is pass whois is perform on that server (no parsing take place for finding Registrar whois server)
-
-
-
-```python
-
-Pois.check_whois_is_installed()
-result = Pois.fetch_whois('github.com', whois_server='whois.onlinenic.com', timeout=5)
-
-```
-
-
-and a complete example
-
-
-
-```python
-
-from pois import Pois
 
 try:
 
-    Pois.check_whois_is_installed()
-    result = Pois.fetch_whois('github.com', whois_server='whois.onlinenic.com', timeout=5)
+    result = Pois.fetch_whois(domain='github.com', timeout=5)
     print(result['raw'], ['normalized'])
     
 except Exception as err:
