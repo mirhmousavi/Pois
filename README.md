@@ -15,7 +15,7 @@ so why use Pois over robust libraris like [pythonwhois](https://github.com/joepi
 
 
 2. Pois knows when a domain is available or not so if you whois an unregistered domain
- you get DomainNotFoundError (this come from parsing major whois servers reponse for an unvalid domain)
+ you get DomainNotFoundError (this come from parsing major whois servers response for an unvalid domain and make a pattern for it)
 
 
 
@@ -66,7 +66,7 @@ except Exception as err:
 ## Exceptions
 
 
-Pois return these exceptions that is self-describe
+Pois return these exceptions that is self-described
 
 
 ```
