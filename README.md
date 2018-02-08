@@ -1,5 +1,5 @@
 # Pois
-a Python whois utility using sockets
+a better whois client for python
 
 
 
