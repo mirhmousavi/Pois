@@ -63,6 +63,21 @@ except Exception as err:
 ```
 
 
+## Exceptions
+
+
+Pois return these exceptions that is self-describe
+
+
+```
+
+TimeoutError, WhoisError, BadDomainError, DomainNotFoundError
+
+
+```
+
+
+
 
 
 
