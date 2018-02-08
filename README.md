@@ -3,13 +3,9 @@ a Python wrapper for linux whois that return authentic domain information (not a
 
 
 
-## Why use it?
 
+## Why use Pois over other libraries?
 
----
-
-
-so why use Pois over other libraries? <br>
 
 
 1. when you whois a gtld like com you get a thin whois means no contact information will be returned, for get that information and get a thick whois you should whois domain with 
@@ -29,10 +25,9 @@ so you always get authentic result not abuse ones.
 
 
 
+
 ## How use it
 
-
----
 
 
 
@@ -44,6 +39,7 @@ result = Pois.fetch_whois('github.com')
 print(result['raw'], ['normalized'])
 
 ```
+
 
 
 you can pass timeout (in second) and whois_server, if whois_server is pass whois is perform on that server (no parsing take place for finding Registrar whois server)
