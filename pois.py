@@ -56,9 +56,9 @@ class Pois():
         return {'raw':result, 'normalized':cls.normalize_result(result)}
 
     @classmethod
-    def validate_result(cls, result):
-        if result.lower().startswith('no match') or ('no entries found' in result.lower()): raise DomainNotFoundError(domain)
-        if result.lower().startswith('no whois server'): raise NoWhoisServerFoundError(domain)
+    def validate_result(cls, domain, result):
+        if result.lower().startswith('no match') or ('no entries found' in result.lower()): raise DomainNotFoundError(domain, result)
+        if result.lower().startswith('no whois server'): raise NoWhoisServerFoundError(domain, result)
         return None
     
     @classmethod
@@ -67,10 +67,14 @@ class Pois():
         output = {}
         last_key = None
         for line in lines:
-            splitted_by_colon = line.split(':') 
-            if len(splitted_by_colon) != 2:
-                if not last_key: continue
-                output[last_key] += ' ' + ' '.join([ token for token in splitted_by_colon])
+            if not line.strip(): continue
+            splitted_by_colon = line.split(': ', maxsplit=1)
+
+            if len(splitted_by_colon) < 2:
+                if not last_key: last_key = '0'
+                output[last_key] += splitted_by_colon[0].strip()
+                continue
+            
             key, value = splitted_by_colon
             output[key.strip()] = value.strip()
             last_key = key.strip()
