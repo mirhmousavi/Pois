@@ -46,12 +46,12 @@ anything and won't close the connection.
 
 
 
-Download project and rename it to Pois then use it in you program like this:
+copy 'pois' folder anywhere wou want then use it in you program like this:
 
 
 ```python
 
-from Pois import Pois
+from pois import Pois
 
 try:
 
