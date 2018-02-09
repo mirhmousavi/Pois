@@ -1,12 +1,12 @@
-import tldextract, subprocess, re, sys, json, traceback, socket
-
+import tldextract, subprocess, re, sys, json, traceback, socket, os
+ROOT_DIR= os.path.abspath( os.path.dirname( os.path.realpath(__file__) ) )
                 
 class Pois():
     tld = []
     
     @classmethod
     def load_tld(cls):
-        if not cls.tld: cls.tld = json.loads(open('tld.json', 'r').read())
+        if not cls.tld: cls.tld = json.loads(open(ROOT_DIR+'/tld.json', 'r').read())
 
     @classmethod
     def check_tld_is_valid(cls, domain):
@@ -24,7 +24,6 @@ class Pois():
         
         domain_suffix = URI.get_domain_suffix(domain)
         whois_server = cls.tld[domain_suffix]['host']
-        
         result = SocketPipeline.execute_whois(domain=domain, whois_server=whois_server, timeout=timeout)
 
         if 'registrar whois server' in result.lower():
