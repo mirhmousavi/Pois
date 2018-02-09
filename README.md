@@ -46,7 +46,7 @@ anything and won't close the connection.
 
 
 
-Download project and rename it to Pois then put this module anywhere and use it like this:
+Download project and rename it to Pois then use it in you program like this:
 
 
 ```python
