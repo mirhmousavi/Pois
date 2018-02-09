@@ -46,7 +46,7 @@ anything and won't close the connection.
 
 
 
-copy 'pois' folder anywhere wou want then use it in you program like this:
+copy 'pois' folder anywhere you want then use it in you program like this:
 
 
 ```python
