@@ -7,7 +7,7 @@ a better whois client for python
 ## Why use Pois over other libraries?
 
 
-so why use Pois over robust libraris like [pythonwhois](https://github.com/joepie91/python-whois), [pywhois](https://bitbucket.org/richardpenman/pywhois)...
+so why use Pois over robust libraries like [pythonwhois](https://github.com/joepie91/python-whois), [pywhois](https://bitbucket.org/richardpenman/pywhois)...
 
 
 1. Pois use all whois servers of all available tld so it whois domain with tld specific whois server (worth mention that linux whois utility is lack of get whois of new tld like .rocks)
