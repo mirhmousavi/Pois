@@ -6,7 +6,7 @@ class SocketPipelineTests(unittest.TestCase):
 
     def test_execute_whois(self):
         result = SocketPipeline.execute_whois(domain='google.com', timeout=10, whois_server='com.whois-servers.net')
-        # print(result)
+        #print(result)
         assert result
         
     def test_execute_whois_with_bad_whois_server(self):

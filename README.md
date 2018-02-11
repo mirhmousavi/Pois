@@ -13,10 +13,11 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 1. Pois use all whois servers of all available tld so it whois domain with tld specific whois server (worth mention that linux whois utility is lack of get whois of new tld like .rocks)
 
 
+3. You can pass a whois server to query that server for whois
+
 
 2. Pois knows when a domain is available or not so if you whois an unregistered domain
- you get DomainNotFoundError (this come from parsing major whois servers response for an unvalid domain and make a pattern for it)
-
+ you get DomainNotExistsError
 
 
 3. You can specify a timeout for whois operation, some whois servers after user quota exceeded for get whois just don't return
@@ -55,7 +56,7 @@ from pois import Pois
 
 try:
 
-    result = Pois.fetch_whois(domain='github.com', timeout=5)
+    result = Pois.fetch_whois(domain='github.com', whois_server=None, timeout=5)
     print(result['raw'], result['normalized'])
     
 except Exception as err:
@@ -73,7 +74,7 @@ Pois return these exceptions that is self-described
 
 ```
 
-TimeoutError, WhoisError, BadDomainError, DomainNotFoundError
+TimeoutError, WhoisError, BadDomainError, DomainNotExistsError, NoWhoisServerFoundError
 
 
 ```

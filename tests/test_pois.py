@@ -5,20 +5,40 @@ import traceback
 
 class PoisTests(unittest.TestCase):
     
-    def test_fetch_whois_with_bad_formatted_domain(self):
-        try:
-            Pois().fetch_whois(domain='sdfgs@fg(*&com')
-            assert True == False
-        except BadDomainError:
-            assert True == True
-
     def test_fetch_whois_of_valid_domain(self):
         try:
             Pois().fetch_whois(domain='github.com')
             assert True == True 
         except :
             assert True == False
-            
+   
+    def test_fetch_whois_of_valid_domain_with_defined_whois_server(self):
+        try:
+            Pois().fetch_whois(domain='github.com', whois_server='whois.verisign-grs.com')
+            assert True == True 
+        except :
+            assert True == False
+
+    def test_fetch_whois_of_not_exist_domain(self):
+        try:
+            Pois().fetch_whois(domain='a43a5dgdbck84jsdgsdfsdv7jnmjskf.com')
+            assert True == False 
+        except DomainNotExistsError:
+            assert True == True
+            return
+        
+        assert True == False
+
+    def test_fetch_whois_of_not_exists_tld(self):
+        try:
+            Pois().fetch_whois(domain='google.hjksadbfjhsbjdhf')
+            assert True == False 
+        except NoWhoisServerFoundError:
+            assert True == True
+            return
+        
+        assert True == False
+                               
 #     def test_not_found(self):
 #         
 #         handle = open('result', 'w')
