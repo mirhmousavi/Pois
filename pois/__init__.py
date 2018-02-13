@@ -65,18 +65,19 @@ class Pois():
 #         ]
 #        if result_in_small_caps.startswith('Available') or result_in_small_caps in domain_not_found_statements_in_small_caps:
         
+        # if result in less than 10 possibly domain not found
         if len(normalized_result) < 10:
             raise DomainNotExistsError(domain, result)
         return None
     
     @classmethod
     def normalize_result(cls, result):
-        lines = result.split('\n')
+        lines = result.splitlines()
         output = {}
         # last_key = None
         for line in lines:
             if not line.strip(): continue
-            splitted_by_colon = line.split(': ', maxsplit=1)
+            splitted_by_colon = line.split(':', maxsplit=1)
     
             if len(splitted_by_colon) < 2: continue
             
