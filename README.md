@@ -16,8 +16,7 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 3. You can pass a whois server to query that server for whois
 
 
-2. Pois knows when a domain is available or not so if you whois an unregistered domain
- you get DomainNotExistsError
+2. Pois return BadWhoisResultError if domain not found or your whois quota exceeded.
 
 
 3. You can specify a timeout for whois operation, some whois servers after user quota exceeded for get whois just don't return
@@ -74,7 +73,7 @@ Pois return these exceptions that is self-described
 
 ```
 
-TimeoutError, WhoisError, BadDomainError, DomainNotExistsError, NoWhoisServerFoundError
+TimeoutError, WhoisError, BadDomainError, BadWhoisResultError, NoWhoisServerFoundError
 
 
 ```

@@ -23,7 +23,7 @@ class PoisTests(unittest.TestCase):
         try:
             Pois().fetch_whois(domain='a43a5dgdbck84jsdgsdfsdv7jnmjskf.com')
             assert True == False 
-        except DomainNotExistsError:
+        except BadWhoisResultError:
             assert True == True
             return
         
@@ -31,7 +31,7 @@ class PoisTests(unittest.TestCase):
 
     def test_fetch_whois_of_not_exists_tld(self):
         try:
-            Pois().fetch_whois(domain='google.hjksadbfjhsbjdhf')
+            Pois().fetch_whois(domain='github.hjksadbfjhsbjdhf')
             assert True == False 
         except NoWhoisServerFoundError:
             assert True == True

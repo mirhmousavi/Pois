@@ -67,7 +67,7 @@ class Pois():
         
         # if result in less than 10 possibly domain not found
         if len(normalized_result) < 10:
-            raise DomainNotExistsError(domain, result)
+            raise BadWhoisResultError(domain, result)
         return None
     
     @classmethod
@@ -136,10 +136,10 @@ class URI():
         return parsed_url.suffix
 
                 
-class DomainNotExistsError(Exception):
+class BadWhoisResultError(Exception):
 
     def __str__(self):
-        return 'domain not found on specified whois server'
+        return 'domain not found on specified whois server or you whois quota exceeded'
 
 
 class BadDomainError(Exception):
