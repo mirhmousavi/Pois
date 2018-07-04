@@ -14,9 +14,9 @@ ROOT_DIR = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 
 class Pois():
     tlds = []
+    tlds_file_path = ROOT_DIR + '/tlds.json'
 
     def __init__(self, timeout=10, proxy_info=None):
-        self.tlds_file_path = ROOT_DIR + '/tlds.json'
         self.timeout = timeout
         self.tlds = self.load_tlds_file(self.tlds_file_path)
         self.proxy_info=proxy_info or {}

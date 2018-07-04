@@ -1,6 +1,6 @@
 import unittest
 from pois import *
-
+import time
 
 class PoisTests(unittest.TestCase):
 
@@ -19,3 +19,11 @@ class PoisTests(unittest.TestCase):
     def test_fetch_whois_of_not_exists_tld(self):
         with self.assertRaises(NoWhoisServerFoundError) as e:
             Pois().fetch(domain='github.notexis8888888')
+
+    def test_update_tld_file(self):
+        random = int(time.time())
+        p = Pois()
+        p.update_tlds_file({'random': random})
+        with open(Pois.tlds_file_path,'r') as f:
+            content = json.load(f)
+            assert content['random'] == random
