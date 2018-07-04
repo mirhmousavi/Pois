@@ -1,5 +1,5 @@
 import unittest
 from pois import *
 
-class URITests(unittest.TestCase):
+class DomainTests(unittest.TestCase):
     pass

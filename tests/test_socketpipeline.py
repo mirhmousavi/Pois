@@ -1,25 +1,39 @@
 import unittest
 from pois import *
-
+import socket
 
 class SocketPipelineTests(unittest.TestCase):
 
     def test_execute_whois(self):
-        result = SocketPipeline.execute_whois(domain='google.com', timeout=10, whois_server='com.whois-servers.net')
-        #print(result)
-        assert result
-        
+        result = SocketPipeline().execute(query='github.com\r\n', server='com.whois-servers.net', port=43)
+        # print(result)
+        assert bool(result) == True
+
     def test_execute_whois_with_bad_whois_server(self):
-        try:
-            result = SocketPipeline.execute_whois(domain='google.com', timeout=10, whois_server='7465.whois-servers.net')
-            assert True == False
-        except WhoisError:
-            assert True == True
-       
+        with self.assertRaises(SocketError) as e:
+            SocketPipeline().execute(query='github.com\r\n', server='7465.whois-servers.net', port=43)
+
     def test_execute_whois_with_bad_domain(self):
-        try:
-            result = SocketPipeline.execute_whois(domain='google', timeout=10, whois_server='7465.whois-servers.net')
-            assert True == False
-        except WhoisError:
-            assert True == True
-       
+        with self.assertRaises(SocketError) as e:
+            SocketPipeline().execute(query='github\r\n', server='7465.whois-servers.net', port=43)
+
+    def test_get_webpage(self):
+        s=SocketPipeline()
+        result = s.execute('GET / HTTP/1.1\r\nHost: icanhazip.com\r\n\r\n',socket.gethostbyname('icanhazip.com'), 80)
+        assert result
+
+    def test_get_webpage_with_proxy(self):
+        s1=SocketPipeline()
+        s1.set_proxy(proxy_type='http',addr='localhost', port=8118)
+        result_with_proxy = s1.execute('GET / HTTP/1.1\r\nHost: icanhazip.com\r\n\r\n',socket.gethostbyname('icanhazip.com'), 80)
+
+        s2 = SocketPipeline()
+        result_without_proxy = s2.execute('GET / HTTP/1.1\r\nHost: icanhazip.com\r\n\r\n',socket.gethostbyname('icanhazip.com'), 80)
+
+        assert result_with_proxy.split('\r\n')[-1] != result_without_proxy.split('\r\n')[-1]
+        assert result_with_proxy
+        assert result_without_proxy
+
+    def test_whois_with_low_timeout(self):
+        with self.assertRaises(SocketTimeoutError) as e:
+            SocketPipeline(timeout=1).execute(query='GET / HTTP/1.1\r\nHost: icanhazip.com\r\n',server=socket.gethostbyname('icanhazip.com'), port=80)

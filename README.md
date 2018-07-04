@@ -2,65 +2,64 @@
 a better whois client for python
 
 
-
-
 ## Why use Pois over other libraries?
 
 
 so why use Pois over robust libraries like [pythonwhois](https://github.com/joepie91/python-whois), [pywhois](https://bitbucket.org/richardpenman/pywhois)...
 
 
-1. Pois use all whois servers of all available tld so it whois domain with tld specific whois server (worth mention that linux whois utility is lack of get whois of new tld like .rocks)
+1. Pois uses a complete list of whois servers for all available tlds and if it didn't find any whois server for a specific brand new tld
+ it query `whois.iana.org` to get tld whois server (`tlds.json` file will be updated when new whois servers fetched)
+
+ 
+2. Pois accept http and socks proxies, thank to `pysocks`
 
 
-3. You can pass a whois server to query that server for whois
+3. Pois accepts user defined whois server to query desired domain
 
 
-2. Pois return BadWhoisResultError if domain not found or your whois quota exceeded.
+4. Pois accepts a timeout for whois operation, some whois servers time out after user quota exceeded
 
 
-3. You can specify a timeout for whois operation, some whois servers after user quota exceeded for get whois just don't return
-anything and won't close the connection.
-
-
-
-4. Pois parse result and if find a Registrar whois server, re-whois that server to get complete whois (thick whois)
-
-
-
-5. Pois use sockets so it's portable.
-
-
-
-6. Pois return result in raw and nomalized format, in the latter you a get a clean dict of whois result.
-
-
-
-*** tld whois severs provided from [weppos/whois](https://github.com/weppos/whois/)
-
+5. Pois parses result and if it finds a Registrar whois server, re-whois that server to get complete whois (thick whois)
 
 
 
 
 ## How use it
 
+copy 'pois' folder anywhere you want then import it.
 
 
-copy 'pois' folder anywhere you want then use it in you program like this:
+
+
+## How use it with Proxy
+
+to use proxy just call `set_proxy()` with these arguments
+`proxy_type`, `addr`, `port`, `username`, `password`<br>
+proxy_type can be `http`,`socks4` or `socks5`
 
 
 ```python
 
-from pois import Pois
+from pois import *
 
+# without proxy
 try:
-
-    result = Pois.fetch_whois(domain='github.com', whois_server=None, timeout=5)
-    print(result['raw'], result['normalized'])
-    
+    p = Pois(timeout=10)
+    result = p.fetch(domain='github.com', whois_server=None,)
 except Exception as err:
     print(str(err))
-    print(err.args)
+    
+    
+# with proxy
+try:
+    p = Pois(timeout=10)
+    p.set_proxy(proxy_type='http',addr='localhost', port=8118)
+    result = p.fetch(domain='github.com', whois_server=None,)
+except Exception as err:
+    print(str(err))
+    
     
 ```
 
@@ -68,16 +67,10 @@ except Exception as err:
 ## Exceptions
 
 
-Pois return these exceptions that is self-described
-
+```
+TldsFileError, BadDomainError, NoWhoisServerFoundError, SocketTimeoutError, SocketError
 
 ```
-
-TimeoutError, WhoisError, BadDomainError, BadWhoisResultError, NoWhoisServerFoundError
-
-
-```
-
 
 
 
