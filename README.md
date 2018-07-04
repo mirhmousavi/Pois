@@ -1,5 +1,5 @@
 # Pois
-a better whois client for python
+Whois client for Python with Proxy
 
 
 ## Why use Pois over other libraries?
@@ -26,16 +26,15 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 
 
 
-## How use it
+## How to use it
 
-copy 'pois' folder anywhere you want then import it.
-
-
+copy `pois` folder anywhere you want then import it.
 
 
-## How use it with Proxy
 
-to use proxy just call `set_proxy()` with these arguments
+## How to use it with Proxy
+
+just pass `proxy_info` dict with these arguments to `Pois()` <br>
 `proxy_type`, `addr`, `port`, `username`, `password`<br>
 proxy_type can be `http`,`socks4` or `socks5`
 
@@ -54,8 +53,8 @@ except Exception as err:
     
 # with proxy
 try:
-    p = Pois(timeout=10)
-    p.set_proxy(proxy_type='http',addr='localhost', port=8118)
+    proxy_info = {'proxy_type':'http','addr':'localhost', 'port':8118}
+    p = Pois(timeout=10, proxy_info=proxy_info)
     result = p.fetch(domain='github.com', whois_server=None,)
 except Exception as err:
     print(str(err))
