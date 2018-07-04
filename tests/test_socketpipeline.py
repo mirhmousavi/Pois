@@ -6,8 +6,7 @@ class SocketPipelineTests(unittest.TestCase):
 
     def test_execute_whois(self):
         result = SocketPipeline().execute(query='github.com\r\n', server='com.whois-servers.net', port=43)
-        # print(result)
-        assert bool(result) == True
+        assert result
 
     def test_execute_whois_with_bad_whois_server(self):
         with self.assertRaises(SocketError) as e:
@@ -23,8 +22,7 @@ class SocketPipelineTests(unittest.TestCase):
         assert result
 
     def test_get_webpage_with_proxy(self):
-        s1=SocketPipeline()
-        s1.set_proxy(proxy_type='http',addr='localhost', port=8118)
+        s1=SocketPipeline(proxy_info={'proxy_type':'http','addr':'localhost', 'port':8118})
         result_with_proxy = s1.execute('GET / HTTP/1.1\r\nHost: icanhazip.com\r\n\r\n',socket.gethostbyname('icanhazip.com'), 80)
 
         s2 = SocketPipeline()

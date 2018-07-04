@@ -15,11 +15,11 @@ ROOT_DIR = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 class Pois():
     tlds = []
 
-    def __init__(self, timeout=10):
+    def __init__(self, timeout=10, proxy_info=None):
         self.tlds_file_path = ROOT_DIR + '/tlds.json'
         self.timeout = timeout
         self.tlds = self.load_tlds_file(self.tlds_file_path)
-        self.proxy_info={}
+        self.proxy_info=proxy_info or {}
 
     ##################################
     ##################################
@@ -44,16 +44,10 @@ class Pois():
     ##################################
     ##################################
 
-    def set_proxy(self, *args, **kwargs):
-        self.proxy_info = kwargs
-
-    ##################################
-    ##################################
-
     def find_whois_server_for_tld(self, tld):
         whois_server = ''
         try:
-            s = SocketPipeline()
+            s = SocketPipeline(proxy_info=self.proxy_info)
             result = s.execute('%s\r\n' % tld, 'whois.iana.org', 43)
             whois_server = (re.findall("^.*whois:.*$", result, re.MULTILINE | re.IGNORECASE))[0].strip().split(':')[1].strip()
         except:
@@ -74,8 +68,7 @@ class Pois():
         domain_suffix = Domain.get_suffix(domain)
         whois_server = whois_server or self.tlds.get(domain_suffix) or self.find_whois_server_for_tld(domain_suffix)
 
-        s = SocketPipeline(timeout=self.timeout)
-        if self.proxy_info: s.set_proxy(**self.proxy_info)
+        s = SocketPipeline(timeout=self.timeout, proxy_info=self.proxy_info)
         result = s.execute(query="%s\r\n" % domain, server=whois_server,port=43)
 
         try:
@@ -98,24 +91,30 @@ class Pois():
 
 class SocketPipeline():
 
-    def __init__(self, timeout=10):
+    def __init__(self, timeout=10, proxy_info=None):
         self.timeout = timeout
-        self.proxy_info = {}
+        ################
+        # set proxy
+        self.proxy_info_sanitized = {'proxy_type':None,'addr':None,'port':None,'username':None,'password':None}
+        proxy_info = proxy_info or {}
 
-    def set_proxy(self, **kwargs):
-        if kwargs.get('proxy_type') == 'http':
-            kwargs['proxy_type'] = socks.HTTP
-        elif kwargs.get('proxy_type') == 'socks4':
-            kwargs['proxy_type'] = socks.SOCKS4
-        elif kwargs.get('proxy_type') == 'sock5':
-            kwargs['proxy_type'] = socks.SOCKS5
+        if proxy_info.get('proxy_type') == 'http':
+            self.proxy_info_sanitized['proxy_type'] = socks.HTTP
+        elif proxy_info.get('proxy_type') == 'socks4':
+            self.proxy_info_sanitized['proxy_type'] = socks.SOCKS4
+        elif proxy_info.get('proxy_type') == 'sock5':
+            self.proxy_info_sanitized['proxy_type'] = socks.SOCKS5
 
-        self.proxy_info = kwargs
+        self.proxy_info_sanitized['addr']=proxy_info.get('addr')
+        self.proxy_info_sanitized['port']=proxy_info.get('port')
+        self.proxy_info_sanitized['username']=proxy_info.get('username')
+        self.proxy_info_sanitized['password']=proxy_info.get('password')
+        #################
 
     def execute(self, query, server, port):
         try:
             s = socks.socksocket()
-            if self.proxy_info: s.set_proxy(**self.proxy_info)
+            s.set_proxy(**self.proxy_info_sanitized)
             s.settimeout(self.timeout)
             s.connect((server, port))
             s.send(query.encode('utf-8'))
