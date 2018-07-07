@@ -26,18 +26,31 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 
 
 
-## How to use it
+## Getting started
 
 copy `pois` folder anywhere you want then import it.
 
+first create a `Pois` object
+```python
 
+p = Pois()
 
-## How to use it with Proxy
+```
 
-just pass `proxy_info` dict with these arguments to `Pois()` <br>
-`proxy_type`, `addr`, `port`, `username`, `password`<br>
-proxy_type can be `http`,`socks4` or `socks5`
+You can set a timeout for whois operation by passing `timeout` argument, timeout must be an integer <br>
+to set proxy just pass `proxy_info` dict with these arguments<br>
 
+- `proxy_type`: must be `http`,`socks4` or `socks5`<br>
+- `addr`: server ip or address<br>
+- `username`: proxy username if specified<br>
+- `password`: proxy password if specified<br>
+- `port`: proxy port in integer<br>
+
+to fetch whois of  domain just call `fetch` method, this method take two arguments, `domain` and `whois_server`
+- `domain` is the domain that you want to fetch whois of<br>
+- `whois_server` is the whois server that you want to query the domain on that server, if not specified Pois will use
+the authentic whois server for that domain<br>
+see `tests` for more examples
 
 ```python
 
@@ -67,7 +80,7 @@ except Exception as err:
 
 
 ```
-TldsFileError, BadDomainError, NoWhoisServerFoundError, SocketTimeoutError, SocketError
+TldsFileError, BadDomainError, NoWhoisServerFoundError, SocketTimeoutError, SocketError, SocketBadProxyError
 
 ```
 

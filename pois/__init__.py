@@ -95,26 +95,35 @@ class SocketPipeline():
         self.timeout = timeout
         ################
         # set proxy
-        self.proxy_info_sanitized = {'proxy_type':None,'addr':None,'port':None,'username':None,'password':None}
+        self.sanitized_proxy_info=self._sanitize_proxy_info(proxy_info)
+        #################
+
+    def _sanitize_proxy_info(self, proxy_info):
+
+        sanitized_proxy_info = {'proxy_type':None,'addr':None,'port':None,'username':None,'password':None}
         proxy_info = proxy_info or {}
 
         if proxy_info.get('proxy_type') == 'http':
-            self.proxy_info_sanitized['proxy_type'] = socks.HTTP
+            sanitized_proxy_info['proxy_type'] = socks.HTTP
         elif proxy_info.get('proxy_type') == 'socks4':
-            self.proxy_info_sanitized['proxy_type'] = socks.SOCKS4
+            sanitized_proxy_info['proxy_type'] = socks.SOCKS4
         elif proxy_info.get('proxy_type') == 'sock5':
-            self.proxy_info_sanitized['proxy_type'] = socks.SOCKS5
+            sanitized_proxy_info['proxy_type'] = socks.SOCKS5
+        elif proxy_info.get('proxy_type'):
+            raise SocketBadProxyError('proxy type error')
 
-        self.proxy_info_sanitized['addr']=proxy_info.get('addr')
-        self.proxy_info_sanitized['port']=proxy_info.get('port')
-        self.proxy_info_sanitized['username']=proxy_info.get('username')
-        self.proxy_info_sanitized['password']=proxy_info.get('password')
+        sanitized_proxy_info['addr']=proxy_info.get('addr')
+        sanitized_proxy_info['port']=proxy_info.get('port')
+        sanitized_proxy_info['username']=proxy_info.get('username')
+        sanitized_proxy_info['password']=proxy_info.get('password')
+        return sanitized_proxy_info
+
         #################
 
     def execute(self, query, server, port):
         try:
             s = socks.socksocket()
-            s.set_proxy(**self.proxy_info_sanitized)
+            s.set_proxy(**self.sanitized_proxy_info)
             s.settimeout(self.timeout)
             s.connect((server, port))
             s.send(query.encode('utf-8'))
@@ -176,3 +185,5 @@ class SocketError(PoisError):
 class SocketTimeoutError(SocketError):
     pass
 
+class SocketBadProxyError(SocketError):
+    pass
