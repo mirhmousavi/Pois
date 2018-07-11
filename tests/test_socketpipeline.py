@@ -35,3 +35,7 @@ class SocketPipelineTests(unittest.TestCase):
     def test_whois_with_low_timeout(self):
         with self.assertRaises(SocketTimeoutError) as e:
             SocketPipeline(timeout=1).execute(query='GET / HTTP/1.1\r\nHost: icanhazip.com\r\n',server=socket.gethostbyname('icanhazip.com'), port=80)
+
+    def test_bad_proxy_format(self):
+        with self.assertRaises(SocketBadProxyError) as e:
+            SocketPipeline(proxy_info={'proxy_type':'xxx','addr':'12'})

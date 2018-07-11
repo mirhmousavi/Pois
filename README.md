@@ -48,8 +48,8 @@ to set proxy just pass `proxy_info` dict with these arguments<br>
 
 to fetch whois of  domain just call `fetch` method, this method take two arguments, `domain` and `whois_server`
 - `domain` is the domain that you want to fetch whois of<br>
-- `whois_server` is the whois server that you want to query the domain on that server, if not specified Pois will use
-the authentic whois server for that domain<br>
+- `whois_server` is the whois server that you want to query the domain on that server, if set to None Pois will use
+the authentic whois server for that domain tld<br>
 see `tests` for more examples
 
 ```python
@@ -59,7 +59,9 @@ from pois import *
 # without proxy
 try:
     p = Pois(timeout=10)
-    result = p.fetch(domain='github.com', whois_server=None,)
+    result = p.fetch(domain='github.com', whois_server='whois.verisign-grs.com')
+    # or
+    result = p.fetch(domain='github.com',)
 except Exception as err:
     print(str(err))
     
