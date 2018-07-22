@@ -28,9 +28,15 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 
 ## Getting started
 
-copy `pois` folder anywhere you want then import it.
+Install `pysocks` and `tlddextract` <br>
+```
+pip install pysocks
+pip install tldextract
+```
 
+copy `pois` folder anywhere you want then import it.
 first create a `Pois` object
+
 ```python
 
 p = Pois()
