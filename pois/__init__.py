@@ -69,7 +69,8 @@ class Pois():
         if not domain_suffix: raise BadDomainError('domain suffix is Null')
         # whois server for second level domains is same as top level domain for example whois server for .co.uk is same as whois server for .uk so we get the latter
         # and search in tlds.json
-        whois_server = whois_server or self.tlds.get(domain_suffix.split('.')[-1]) or self.find_whois_server_for_tld(domain_suffix)
+        tld = domain_suffix.split('.')[-1]
+        whois_server = whois_server or self.tlds.get(tld) or self.find_whois_server_for_tld(tld)
 
         s = SocketPipeline(timeout=self.timeout, proxy_info=self.proxy_info)
         result = s.execute(query="%s\r\n" % domain, server=whois_server,port=43)
@@ -135,7 +136,9 @@ class SocketPipeline():
                 chunk = s.recv(4096)
                 result += chunk
                 if not chunk: break
-            return result.decode('utf-8').strip()
+            # whois result encoding from some domains has problems in utf-8 so we ignore that characters, for ex whois result of `controlaltdelete.pt`
+            return result.decode('utf-8','ignore')
+
         except (socks.ProxyConnectionError, socket.timeout):
             raise SocketTimeoutError('time out on quering %s' % query)
         except Exception as err:
