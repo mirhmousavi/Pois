@@ -66,7 +66,10 @@ class Pois():
         # domain nomalization        
         domain = Domain.normalize(domain)
         domain_suffix = Domain.get_suffix(domain)
-        whois_server = whois_server or self.tlds.get(domain_suffix) or self.find_whois_server_for_tld(domain_suffix)
+        if not domain_suffix: raise BadDomainError('domain suffix is Null')
+        # whois server for second level domains is same as top level domain for example whois server for .co.uk is same as whois server for .uk so we get the latter
+        # and search in tlds.json
+        whois_server = whois_server or self.tlds.get(domain_suffix.split('.')[-1]) or self.find_whois_server_for_tld(domain_suffix)
 
         s = SocketPipeline(timeout=self.timeout, proxy_info=self.proxy_info)
         result = s.execute(query="%s\r\n" % domain, server=whois_server,port=43)
