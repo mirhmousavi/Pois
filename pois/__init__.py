@@ -66,7 +66,6 @@ class Pois():
         # domain nomalization        
         domain = Domain.normalize(domain)
         domain_suffix = Domain.get_suffix(domain)
-        if not domain_suffix: raise BadDomainError('domain suffix is Null')
         # whois server for second level domains is same as top level domain for example whois server for .co.uk is same as whois server for .uk so we get the latter
         # and search in tlds.json
         tld = domain_suffix.split('.')[-1]
@@ -137,7 +136,7 @@ class SocketPipeline():
                 result += chunk
                 if not chunk: break
             # whois result encoding from some domains has problems in utf-8 so we ignore that characters, for ex whois result of `controlaltdelete.pt`
-            return result.decode('utf-8','ignore')
+            return result.decode('utf-8','replace')
 
         except (socks.ProxyConnectionError, socket.timeout):
             raise SocketTimeoutError('time out on quering %s' % query)
@@ -157,7 +156,8 @@ class Domain():
     def normalize(domain):
         parsed_url = tldextract.extract(domain)
         domain = parsed_url.domain and parsed_url.domain + '.' + parsed_url.suffix
-        if not domain: raise BadDomainError(input)
+        if not domain: raise BadDomainError('no domain detected for {}'.format(domain))
+        if not parsed_url.suffix: raise BadDomainError('no suffix detected for {}'.format(domain))
         return domain.lower()
 
     @staticmethod
