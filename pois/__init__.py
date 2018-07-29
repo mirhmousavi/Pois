@@ -4,6 +4,7 @@ import re
 import socket
 import socks
 import tldextract
+import chardet
 
 ###################################################
 ###################################################
@@ -136,7 +137,8 @@ class SocketPipeline():
                 result += chunk
                 if not chunk: break
             # whois result encoding from some domains has problems in utf-8 so we ignore that characters, for ex whois result of `controlaltdelete.pt`
-            return result.decode('utf-8','replace')
+            result_encoding = chardet.detect(result)['encoding']
+            return result.decode(result_encoding,'replace')
 
         except (socks.ProxyConnectionError, socket.timeout):
             raise SocketTimeoutError('time out on quering %s' % query)
@@ -157,6 +159,7 @@ class Domain():
         parsed_url = tldextract.extract(domain)
         domain = parsed_url.domain and parsed_url.domain + '.' + parsed_url.suffix
         if not domain: raise BadDomainError('no domain detected for {}'.format(domain))
+        print(parsed_url)
         if not parsed_url.suffix: raise BadDomainError('no suffix detected for {}'.format(domain))
         return domain.lower()
 
