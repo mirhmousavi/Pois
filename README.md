@@ -24,14 +24,14 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 5. Pois parses result and if it finds a Registrar whois server, re-whois that server to get complete whois (thick whois)
 
 
+6.Pois use fantastic `chardet` library to detect encoding of whois and give you correctly utf-8 decoded result.
 
 
 ## Getting started
 
 Install `pysocks` and `tlddextract` <br>
 ```
-pip install pysocks
-pip install tldextract
+pip install pysocks tldextract chardet
 ```
 
 copy `pois` folder anywhere you want then import it.

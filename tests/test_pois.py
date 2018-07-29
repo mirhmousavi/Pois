@@ -17,12 +17,12 @@ class PoisTests(unittest.TestCase):
         assert result
 
     def test_fetch_whois_of_not_exist_domain(self):
-        result = Pois().fetch(domain='notexist1234567888888888999999999.com')
+        result = Pois().fetch(domain='notexistdomain123.com')
         assert result
 
     def test_fetch_whois_of_not_exists_tld(self):
         with self.assertRaises(NoWhoisServerFoundError) as e:
-            Pois().fetch(domain='github.notexis8888888')
+            Pois().fetch(domain='github.az')
 
     def test_update_tld_file(self):
         random = int(time.time())
