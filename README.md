@@ -19,7 +19,7 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 
 5. Pois parses result and if it finds a Registrar whois server, re-whois that server to get complete whois (thick whois)
 
-6. Pois uses fantastic `chardet` library to detect encoding of whois and give you correctly utf-8 decoded result. if you use other libraries
+6. Pois uses fantastic `chardet` library to detect encoding of whois and give you correctly utf-8 decoded result. for example if you use other libraries
 to get whois of `cloudpbx.com.tr` you see REPLACEMENT_CHARACTER inside result that's because they just decode result to utf-8 and replace
 undecodable characters.
 
