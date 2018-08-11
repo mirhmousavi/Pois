@@ -84,7 +84,7 @@ class Pois():
         # sometimes Registrar WHOIS Server is present but empty like 1001mp3.biz
         # so we use the previous result
         if registrar_whois_server:
-            result = s.execute(query="%s\r\n" % domain, server=registrar_whois_server, port=43)
+            result = s.execute(query="%s\r\n" % domain.encode('idna').decode('utf-8'), server=registrar_whois_server.encode('idna').decode('utf-8'), port=43)
 
         return result
 
