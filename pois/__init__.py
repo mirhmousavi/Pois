@@ -84,7 +84,14 @@ class Pois():
         # sometimes Registrar WHOIS Server is present but empty like 1001mp3.biz
         # so we use the previous result
         if registrar_whois_server:
-            result = s.execute(query="%s\r\n" % domain.encode('idna').decode('utf-8'), server=registrar_whois_server.encode('idna').decode('utf-8'), port=43)
+
+            try:
+                idna_repr_domain = domain.encode('idna').decode('utf-8')
+                idna_repr_registrar_whois_server = registrar_whois_server.encode('idna').decode('utf-8')
+            except UnicodeError:
+                raise PoisError('idna encode error, arguments={},{}'.format(domain, registrar_whois_server))
+
+            result = s.execute(query="%s\r\n" % idna_repr_domain, server=idna_repr_registrar_whois_server, port=43)
 
         return result
 
@@ -179,6 +186,8 @@ class Domain():
 class PoisError(Exception):
     pass
 
+class IDNAError(PoisError):
+    pass
 
 class TldsFileError(PoisError):
     pass
