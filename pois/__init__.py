@@ -63,6 +63,15 @@ class Pois():
     ##################################
     ##################################
 
+    def get_idna_repr(self, input):
+        try:
+            return input.encode('idna').decode('utf-8')
+        except Exception as err:
+            raise PoisError('idna encode error,err={}, arguments={}'.format(err, input))
+
+    ##################################
+    ##################################
+
     def fetch(self, domain, whois_server=None):
         # domain nomalization        
         domain = Domain.normalize(domain)
@@ -85,11 +94,8 @@ class Pois():
         # so we use the previous result
         if registrar_whois_server:
 
-            try:
-                idna_repr_domain = domain.encode('idna').decode('utf-8')
-                idna_repr_registrar_whois_server = registrar_whois_server.encode('idna').decode('utf-8')
-            except UnicodeError:
-                raise PoisError('idna encode error, arguments={},{}'.format(domain, registrar_whois_server))
+            idna_repr_domain = self.get_idna_repr(domain)
+            idna_repr_registrar_whois_server = self.get_idna_repr(registrar_whois_server)
 
             result = s.execute(query="%s\r\n" % idna_repr_domain, server=idna_repr_registrar_whois_server, port=43)
 

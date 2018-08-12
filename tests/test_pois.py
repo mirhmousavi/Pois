@@ -42,3 +42,15 @@ class PoisTests(unittest.TestCase):
         with open(Pois.tlds_file_path,'r') as f:
             content = json.load(f)
             assert content['random'] == random
+
+    def test_get_idna_repr_non_ascii_input(self):
+        p = Pois()
+        result = p.get_idna_repr('سلام')
+        expected_result = 'xn--mgbx5cf'
+        assert result == expected_result
+
+    def test_get_idna_repr_ascii_input(self):
+        p = Pois()
+        result = p.get_idna_repr('hello')
+        expected_result = 'hello'
+        assert result == expected_result
