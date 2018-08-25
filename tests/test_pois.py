@@ -4,6 +4,12 @@ import time
 
 class PoisTests(unittest.TestCase):
 
+    def test_pois_result_have_both_registry_and_registrar_keys(self):
+        result = Pois().fetch(domain='github.com')
+        assert 'registry_result' in result
+        assert 'registrar_result' in result
+
+
     def test_fetch_whois_of_valid_domain(self):
         result = Pois().fetch(domain='github.com')
         assert result

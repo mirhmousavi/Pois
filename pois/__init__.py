@@ -45,7 +45,7 @@ class Pois():
     ##################################
     ##################################
 
-    def find_whois_server_for_tld(self, tld):
+    def fetch_whois_server_for_tld_from_iana(self, tld):
         whois_server = ''
         try:
             s = SocketPipeline(proxy_info=self.proxy_info)
@@ -62,12 +62,20 @@ class Pois():
 
     ##################################
     ##################################
+    #
+    # def get_idna_repr(self, input):
+    #     try:
+    #         return input.encode('idna').decode('utf-8')
+    #     except Exception as err:
+    #         raise PoisError('idna encode error,err={}, arguments={}'.format(err, input))
 
-    def get_idna_repr(self, input):
-        try:
-            return input.encode('idna').decode('utf-8')
-        except Exception as err:
-            raise PoisError('idna encode error,err={}, arguments={}'.format(err, input))
+    ##################################
+    ##################################
+
+
+    def find_whois_server_for_tld(self, tld):
+        result = self.tlds.get(tld) or self.fetch_whois_server_for_tld_from_iana(tld)
+        return result
 
     ##################################
     ##################################
@@ -79,27 +87,32 @@ class Pois():
         # whois server for second level domains is same as top level domain for example whois server for .co.uk is same as whois server for .uk so we get the latter
         # and search in tlds.json
         tld = domain_suffix.split('.')[-1]
-        whois_server = whois_server or self.tlds.get(tld) or self.find_whois_server_for_tld(tld)
+        selected_whois_server = whois_server or self.find_whois_server_for_tld(tld)
 
         s = SocketPipeline(timeout=self.timeout, proxy_info=self.proxy_info)
-        result = s.execute(query="%s\r\n" % domain, server=whois_server,port=43)
+
+        # in many cases, when we query registrar whois server we get full information but sometimes the registry whois sever give us full information like 'php.guru', so we return both results
+
+        registry_result = s.execute(query="%s\r\n" % domain, server=selected_whois_server,port=43)
 
         try:
-            registrar_whois_server = (re.findall("^.*whois server.*$", result, re.MULTILINE | re.IGNORECASE)or
-                    re.findall("^.*registrar whois.*$", result, re.MULTILINE | re.IGNORECASE))[0].strip().split(':')[1].strip()
+            registrar_whois_server = (re.findall("^.*whois server.*$", registry_result, re.MULTILINE | re.IGNORECASE)or
+                    re.findall("^.*registrar whois.*$", registry_result, re.MULTILINE | re.IGNORECASE))[0].strip().split(':')[1].strip()
 
         except Exception:
             registrar_whois_server = None
+
         # sometimes Registrar WHOIS Server is present but empty like 1001mp3.biz
         # so we use the previous result
         if registrar_whois_server:
 
-            idna_repr_domain = self.get_idna_repr(domain)
-            idna_repr_registrar_whois_server = self.get_idna_repr(registrar_whois_server)
+            # idna_repr_domain = self.get_idna_repr(domain)
+            # idna_repr_of_registrar_whois_server = self.get_idna_repr(registrar_whois_server)
+            registrar_result = s.execute(query="%s\r\n" % domain, server=registrar_whois_server, port=43)
+        else:
+            registrar_result = None
 
-            result = s.execute(query="%s\r\n" % idna_repr_domain, server=idna_repr_registrar_whois_server, port=43)
-
-        return result
+        return {'registry_result':registry_result, 'registrar_result': registrar_result}
 
         ###################################################
         ###################################################
