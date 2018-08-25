@@ -10,7 +10,7 @@ so why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 
 1. Pois supports idn domains.
 
-2. Pois supports over 1449 tlds thanks to [dnpedia](https://dnpedia.com/tlds/) and if it didn't find any whois server for a specific brand new tld
+2. Pois supports over 1449 tlds (thanks to [dnpedia](https://dnpedia.com/tlds/)) and if it didn't find any whois server for a specific brand new tld
  it query `whois.iana.org` to get tld whois server (`tlds.json` file will be updated when new whois servers fetched)
 
 3. Pois accept http and socks proxies, thank to `pysocks`
