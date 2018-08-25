@@ -57,6 +57,7 @@ to fetch whois of  domain just call `fetch` method, this method take two argumen
 the authentic whois server for that domain tld<br>
 see `tests` for more examples
 
+
 ```python
 
 from pois import *
@@ -81,6 +82,9 @@ except Exception as err:
     
     
 ```
+
+- in many cases, when we query registrar whois server we get full information but sometimes the registry whois sever give us full information like 'php.guru', so we return both results
+
 
 
 ## Exceptions
