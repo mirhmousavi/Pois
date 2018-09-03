@@ -112,7 +112,7 @@ class Pois():
                 registrar_result = s.execute(query="%s\r\n" % domain, server=registrar_whois_server, port=43)
             except Exception as err:
                 registrar_result = None
-                print('error on quering %s for %s, err: %s' % (registrar_whois_server, domain, str(err)))
+                print(err)
             #################
         else:
             registrar_result = None
