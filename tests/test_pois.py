@@ -39,7 +39,7 @@ class PoisTests(unittest.TestCase):
 
     def test_fetch_whois_of_not_exists_tld(self):
         with self.assertRaises(NoWhoisServerFoundError) as e:
-            Pois().fetch(domain='github.az')['registry_result']
+            Pois().fetch(domain='github.az')
 
     def test_update_tld_file(self):
         random = int(time.time())
