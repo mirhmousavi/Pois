@@ -105,10 +105,15 @@ class Pois():
         # sometimes Registrar WHOIS Server is present but empty like 1001mp3.biz
         # so we use the previous result
         if registrar_whois_server:
-
-            # idna_repr_domain = self.get_idna_repr(domain)
-            # idna_repr_of_registrar_whois_server = self.get_idna_repr(registrar_whois_server)
-            registrar_result = s.execute(query="%s\r\n" % domain, server=registrar_whois_server, port=43)
+            #################
+            try:
+                # idna_repr_domain = self.get_idna_repr(domain)
+                # idna_repr_of_registrar_whois_server = self.get_idna_repr(registrar_whois_server)
+                registrar_result = s.execute(query="%s\r\n" % domain, server=registrar_whois_server, port=43)
+            except Exception as err:
+                registrar_result = None
+                print('error on quering %s for %s, err: %s' % (registrar_whois_server, domain, str(err)))
+            #################
         else:
             registrar_result = None
 
@@ -172,9 +177,9 @@ class SocketPipeline():
             return decoded_result
 
         except (socks.ProxyConnectionError, socket.timeout):
-            raise SocketTimeoutError('time out on quering %s' % query)
+            raise SocketTimeoutError('time out on quering %s for %s' % (server,query.strip()))
         except Exception as err:
-            raise SocketError('error on quering %s, err: %s' % (query, str(err)))
+            raise SocketError('error on quering %s for %s, err: %s' % (server, query.strip(), str(err)))
         finally:
             s.close()
 
