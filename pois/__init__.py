@@ -82,8 +82,8 @@ class Pois():
 
     def fetch(self, domain, whois_server=None):
         # domain nomalization        
-        domain = Domain.normalize(domain)
-        domain_suffix = Domain.get_suffix(domain)
+        domain = Url(domain).domain
+        domain_suffix = Url(domain).suffix
         # whois server for second level domains is same as top level domain for example whois server for .co.uk is same as whois server for .uk so we get the latter
         # and search in tlds.json
         tld = domain_suffix.split('.')[-1]
@@ -96,8 +96,10 @@ class Pois():
         registry_result = s.execute(query="%s\r\n" % domain, server=selected_whois_server,port=43)
 
         try:
-            registrar_whois_server = (re.findall("^.*whois server.*$", registry_result, re.MULTILINE | re.IGNORECASE)or
+            registrar_whois_server = (re.findall("^.*whois server.*$", registry_result, re.MULTILINE | re.IGNORECASE) or
                     re.findall("^.*registrar whois.*$", registry_result, re.MULTILINE | re.IGNORECASE))[0].strip().split(':')[1].strip()
+
+            registrar_whois_server = registrar_whois_server.strip('/\\').strip()
 
         except Exception:
             registrar_whois_server = None
@@ -167,13 +169,15 @@ class SocketPipeline():
                 chunk = s.recv(4096)
                 result += chunk
                 if not chunk: break
+
+            ################
             # whois result encoding from some domains has problems in utf-8 so we ignore that characters, for ex whois result of `controlaltdelete.pt`
             try:
                 decoded_result = result.decode('utf-8')
             except UnicodeDecodeError:
                 result_encoding = chardet.detect(result)['encoding']
                 decoded_result = result.decode(result_encoding)
-
+            ################
             return decoded_result
 
         except (socks.ProxyConnectionError, socket.timeout):
@@ -188,20 +192,27 @@ class SocketPipeline():
             ###################################################
 
 
-class Domain():
+class Url():
 
-    @staticmethod
-    def normalize(domain):
-        parsed_url = tldextract.extract(domain)
+    def __init__(self, url):
+        self.url = url
+        self.parsed_url = tldextract.extract(self.url)
+        self.domain = self._domain()
+        self.suffix = self._suffix()
+
+    #############
+
+    def _domain(self):
+        parsed_url = self.parsed_url
         domain = parsed_url.domain and parsed_url.domain + '.' + parsed_url.suffix
         if not domain: raise BadDomainError('no domain detected for {}'.format(domain))
         if not parsed_url.suffix: raise BadDomainError('no suffix detected for {}'.format(domain))
         return domain.lower()
 
-    @staticmethod
-    def get_suffix(domain):
-        parsed_url = tldextract.extract(domain)
-        return parsed_url.suffix
+    #############
+
+    def _suffix(self):
+        return self.parsed_url.suffix
 
         ###################################################
         ###################################################
