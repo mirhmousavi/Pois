@@ -6,7 +6,7 @@ Whois client for Python with Proxy
 ## Why use Pois over other libraries?
 
 
-so why use Pois over robust libraries like [pythonwhois](https://github.com/joepie91/python-whois), [pywhois](https://bitbucket.org/richardpenman/pywhois)...
+So why use Pois over robust libraries like [pythonwhois](https://github.com/joepie91/python-whois), [pywhois](https://bitbucket.org/richardpenman/pywhois)...
 
 1. Pois supports idn domains.
 
@@ -29,12 +29,15 @@ undecodable characters.
 ## Getting started
 
 Install `pysocks` and `tlddextract` <br>
+
 ```
-pip install pysocks tldextract chardet
+pip install -r requirements.txt
 ```
 
-copy `pois` folder anywhere you want then import it.
-first create a `Pois` object
+Copy `pois` folder anywhere you want then import it.
+
+First create a `Pois` object
+
 
 ```python
 

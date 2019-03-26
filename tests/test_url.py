@@ -1,5 +1,7 @@
 import unittest
+
 from pois import *
+
 
 class UrlTests(unittest.TestCase):
 

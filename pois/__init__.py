@@ -4,9 +4,10 @@ import json
 import os
 import re
 import socket
+
+import chardet
 import socks
 import tldextract
-import chardet
 
 ROOT_DIR = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 
