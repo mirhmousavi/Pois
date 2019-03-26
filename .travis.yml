@@ -11,7 +11,7 @@ before_script:
         - ls
 script:
 
-        - lspytest
+        - pytest
         - ls
         - sudo apt install pip
 
