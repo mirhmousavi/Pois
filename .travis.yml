@@ -13,7 +13,6 @@ script:
 
         - pytest
         - ls
-        - sudo apt install pip
 
 after_success:
         ls
