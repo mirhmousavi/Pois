@@ -1,14 +1,19 @@
 language: python
 python:
         - "3.5"
-virtualenv:
-        system_site_packages: true
 
 sudo: true
 
 install:
         pip install -r requirements.txt
+
+before_script:
+        - ls
 script:
+
         - lspytest
         - ls
         - sudo apt install pip
+
+after_success:
+        ls
