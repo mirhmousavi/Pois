@@ -8,6 +8,8 @@ jobs:
                 - stage: test code
                   python: "3.5"
                   script: ls
+                - stage: more
+                  script: cat requirements.txt
                 - stage: deploy code
                   python: "3.5"
                   script: echo date
