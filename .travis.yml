@@ -10,4 +10,4 @@ jobs:
                   script: ls
                 - stage: deploy code
                   python: "3.5"
-                  script: ls
+                  script: echo date
