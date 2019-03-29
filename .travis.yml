@@ -7,11 +7,11 @@ install:
 jobs:
         include:
                 - stage: run tests
-                  script: pytest -x -ff
+                  script: pytest -x --ff
                 - stage: run code standard tests
                   script: fake8 pois
                 - stage: tidy up code
                   install: echo ''
                   script: isort src -rc -sl
-                  after_success: echo 'tada'
+                  after_success: echo 'finito'
 
