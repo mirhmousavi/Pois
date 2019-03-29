@@ -5,12 +5,13 @@ stages:
 language: python
 python: "3.6"
 
+before_install:
+        skip
+
 install:
         - pip install -r requirements.txt
 
 script: skip
-virtualenv:
-        system_site_packages:true
 
 jobs:
         include:
