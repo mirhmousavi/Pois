@@ -25,6 +25,6 @@ jobs:
                   script: flake8 pois
                 - stage: deploy
                   #install: skip
-                  script: isort . -rc -sl .
+                  script: isort -rc -sl .
                   after_success: echo 'finito'
 
