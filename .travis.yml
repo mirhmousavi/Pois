@@ -1,19 +1,25 @@
+stages:
+	- test
+	- deploy
+
 language: python
 python: "3.6"
 
 install:
         - pip install -r requirements.txt
 
+script: skip
+
 jobs:
         include:
                 # comment this stage because it need better tests that not bound to network to prevent problems like
 		# `reset by peer` or `timeout`, fail tests
-		#- stage: run tests
+		#- stage: test
                 #  script: pytest -x --ff
-                - stage: run code standard tests
-                  script: fake8 pois
-                - stage: tidy up code
-                  install: echo ''
+                - stage: test
+                  script: flake8 pois
+                - stage: deploy
+                  install: skip
                   script: isort src -rc -sl
                   after_success: echo 'finito'
 
