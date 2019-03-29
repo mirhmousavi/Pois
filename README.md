@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/hosseinmousavi/Pois.svg?branch=master)](https://travis-ci.com/hosseinmousavi/Pois)
+
 # Pois
 Whois client for Python with Proxy
 
