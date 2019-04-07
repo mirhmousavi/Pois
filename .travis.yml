@@ -24,5 +24,6 @@ jobs:
                 - stage: deploy
                   #install: skip
                   script: isort -rc -sl .
+                  script: black .
                   after_success: echo 'finito'
 

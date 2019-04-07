@@ -1,4 +1,7 @@
-"""Pois."""
+"""Pois.
+
+A library to whois domains with proxy.
+"""
 
 import json
 import os
@@ -18,7 +21,7 @@ class Pois:
     Attributes:
         timeout (int): the timeout in seconds for fetching whois, this parameter is pass to pysocks timeout
         tlds (dict): a dictionary contains tlds and whois servers
-        procx_info (dict): a dictionary contains proxy connectiing info, this dict can have these fields:
+        proxy_info (dict): a dictionary contains proxy connectiing info, this dict can have these fields:
             `proxy_type`, `addr`, `port`, `username` and ` passsword`
             `proxy_type` can be `http`,`socks4` and `socks5`
     """
@@ -32,7 +35,7 @@ class Pois:
         self.proxy_info = proxy_info or {}
 
     def load_tlds_file(self, path):
-        """load tlds file from file to objext attribute."""
+        """Load tlds from `tlds.json`."""
         try:
             return json.loads(open(path, "r").read())
         except Exception as err:
@@ -42,6 +45,7 @@ class Pois:
             )
 
     def update_tlds_file(self, new_tld):
+        """Update `tlds.json` with new tld."""
         try:
             with open(self.tlds_file_path, "w") as f:
                 self.tlds.update(new_tld)
@@ -52,6 +56,7 @@ class Pois:
             )
 
     def fetch_whois_server_for_tld_from_iana(self, tld):
+        """When tld not found, we query iana to find the right whois server."""
         whois_server = ""
         try:
             s = SocketPipeline(proxy_info=self.proxy_info)
@@ -72,12 +77,12 @@ class Pois:
         raise NoWhoisServerFoundError("no whois server found for %s" % tld)
 
     def find_whois_server_for_tld(self, tld):
-        """this method search inside `tlds.json` and if it didn't find anything, it will query `iana` to find appropriate tld."""
+        """This method search inside `tlds.json` and if it didn't find anything, it will query `iana` to find appropriate tld."""
         result = self.tlds.get(tld) or self.fetch_whois_server_for_tld_from_iana(tld)
         return result
 
     def fetch(self, domain, whois_server=None):
-        """this method query whois server by establishing a scoket connection and get response."""
+        """Query whois server by establishing a socket connection and get response."""
         # domain normalization
         domain = Url(domain).domain
         domain_suffix = Url(domain).suffix
@@ -133,7 +138,7 @@ class Pois:
 
 
 class SocketPipeline:
-    """this class establish socket connection to whois server"""
+    """This class establish socket connection to server."""
 
     def __init__(self, timeout=10, proxy_info=None):
         self.timeout = timeout
@@ -165,7 +170,7 @@ class SocketPipeline:
         return sanitized_proxy_info
 
     def execute(self, query, server, port):
-        """this method send query to server."""
+        """Send query to server."""
         try:
             s = socks.socksocket()
             s.set_proxy(**self.sanitized_proxy_info)
@@ -201,7 +206,7 @@ class SocketPipeline:
 
 
 class Url:
-    """this class is a helper class to do some common operations on urls"""
+    """This class is a helper class to do some common operations on urls."""
 
     def __init__(self, url):
         self.url = url
