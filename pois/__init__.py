@@ -32,7 +32,7 @@ class Pois:
         self.proxy_info = proxy_info or {}
 
     def load_tlds_file(self, path):
-        """load tlds file from file to objext attribute"""
+        """load tlds file from file to objext attribute."""
         try:
             return json.loads(open(path, "r").read())
         except Exception as err:
@@ -71,17 +71,13 @@ class Pois:
 
         raise NoWhoisServerFoundError("no whois server found for %s" % tld)
 
-    # def get_idna_repr(self, input):
-    #     try:
-    #         return input.encode('idna').decode('utf-8')
-    #     except Exception as err:
-    #         raise PoisError('idna encode error,err={}, arguments={}'.format(err, input))
-
     def find_whois_server_for_tld(self, tld):
+        """this method search inside `tlds.json` and if it didn't find anything, it will query `iana` to find appropriate tld."""
         result = self.tlds.get(tld) or self.fetch_whois_server_for_tld_from_iana(tld)
         return result
 
     def fetch(self, domain, whois_server=None):
+        """this method query whois server by establishing a scoket connection and get response."""
         # domain normalization
         domain = Url(domain).domain
         domain_suffix = Url(domain).suffix
@@ -122,8 +118,6 @@ class Pois:
         # so we use the previous result
         if registrar_whois_server:
             try:
-                # idna_repr_domain = self.get_idna_repr(domain)
-                # idna_repr_of_registrar_whois_server = self.get_idna_repr(registrar_whois_server)
                 registrar_result = s.execute(
                     query="%s\r\n" % domain, server=registrar_whois_server, port=43
                 )
@@ -171,6 +165,7 @@ class SocketPipeline:
         return sanitized_proxy_info
 
     def execute(self, query, server, port):
+        """this method send query to server."""
         try:
             s = socks.socksocket()
             s.set_proxy(**self.sanitized_proxy_info)

@@ -17,10 +17,8 @@ script: skip
 
 jobs:
         include:
-                # comment this stage because it need better tests that not bound to network to prevent problems like
-                # `reset by peer` or `timeout`, fail tests
-                #- stage: test
-                #  script: pytest -x --ff
+                - stage: test
+                  script: pytest -x --ff
                 - stage: test
                   script: flake8 pois
                 - stage: deploy

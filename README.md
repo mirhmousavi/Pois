@@ -13,20 +13,17 @@ So why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 1. It supports idn domains.
 
 2. It supports over 1449 tlds (thanks to [dnpedia](https://dnpedia.com/tlds/)) and if it didn't find any whois server for a specific brand new tld
- it query `whois.iana.org` to get tld whois server (`tlds.json` file will be updated when new whois servers fetched)
+ it query `whois.iana.org` to get tld whois server (`tlds.json` file will be updated when new whois servers fetched).
 
-3. It accepts http and socks proxies, thank to `pysocks`
+3. It accepts http and socks proxies, thank to `pysocks`.
 
-4. It accepts user defined whois server to query desired domain
+4. It accepts user defined whois server to query desired domain.
 
-5. It accepts a timeout for whois operation, some whois servers time out after user quota exceeded
+5. It accepts a timeout for whois operation, some whois servers time out after user quota exceeded.
 
-6. It parses result and if it finds a Registrar whois server, re-whois that server to get complete whois (thick whois)
+6. It parses result and if it finds a Registrar whois server, re-whois that server to get complete whois (thick whois).
 
-7. Pois uses fantastic `chardet` library to detect encoding of whois and give you correctly utf-8 decoded result. for example if you use other libraries
-to get whois of `cloudpbx.com.tr` you see REPLACEMENT_CHARACTER inside result that's because they just decode result to utf-8 and replace
-undecodable characters.
-
+7. Pois uses `chardet` library to detect encoding of whois and give you correctly utf-8 decoded result.
 
 ## Getting started
 
@@ -99,8 +96,3 @@ except Exception as err:
 TldsFileError, BadDomainError, NoWhoisServerFoundError, SocketTimeoutError, SocketError, SocketBadProxyError
 
 ```
-
-
-
-
-
