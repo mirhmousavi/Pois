@@ -158,7 +158,7 @@ class SocketPipeline:
             sanitized_proxy_info["proxy_type"] = socks.HTTP
         elif proxy_info.get("proxy_type") == "socks4":
             sanitized_proxy_info["proxy_type"] = socks.SOCKS4
-        elif proxy_info.get("proxy_type") == "sock5":
+        elif proxy_info.get("proxy_type") == "socks5":
             sanitized_proxy_info["proxy_type"] = socks.SOCKS5
         elif proxy_info.get("proxy_type"):
             raise SocketBadProxyError("proxy type error")
