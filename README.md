@@ -1,10 +1,8 @@
 # Pois
-Whois client for Python with Proxy
-
+Whois lookup behind proxy using Python
 
 
 ## Why use Pois over other libraries?
-
 
 So why use Pois over robust libraries like [pythonwhois](https://github.com/joepie91/python-whois), [pywhois](https://bitbucket.org/richardpenman/pywhois)...
 
@@ -23,6 +21,7 @@ So why use Pois over robust libraries like [pythonwhois](https://github.com/joep
 
 7. Pois uses `chardet` library to detect encoding of whois and give you correctly utf-8 decoded result.
 
+
 ## Getting started
 
 Install dependencies
@@ -34,7 +33,6 @@ pip install -r requirements.txt
 Copy `pois` folder anywhere you want then import it.
 
 First create a `Pois` object
-
 
 ```python
 
