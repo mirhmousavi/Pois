@@ -1,0 +1,23 @@
+[project]
+name = "Pois"
+version = "0.1.0"
+description = "Pois"
+authors = [
+    {name = "mirhossein", email = "mr.mousavi@live.com"},
+]
+dependencies = [
+    "tldextract>=5.1.2",
+]
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=8.2.2",
+    "flake8>=7.1.0",
+]
