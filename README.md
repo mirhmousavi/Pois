@@ -1,4 +1,8 @@
 # Pois
+
+![ci](https://github.com/mirhmousavi/Pois/actions/workflows/ci.yaml/badge.svg)
+
+
 Whois lookup behind proxy using Python
 
 
