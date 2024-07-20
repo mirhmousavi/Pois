@@ -1,0 +1,17 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: |
+          pip install --user pdm
+          pip install -U pip
+          pdm install
+      - name: Lint
+        run: pdm run lint
+      - name: Test
+        run: pdm run test
