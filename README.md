@@ -94,6 +94,10 @@ except Exception as err:
 
 
 ```
-TldsFileError, BadDomainError, NoWhoisServerFoundError, SocketTimeoutError, SocketError, SocketBadProxyError
-
+TldsFileError
+BadDomainError
+NoWhoisServerFoundError
+SocketTimeoutError
+SocketError
+SocketBadProxyError
 ```
