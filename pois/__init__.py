@@ -12,6 +12,16 @@ import chardet
 import socks
 import tldextract
 
+from .errors import (
+    BadDomainError,
+    NoWhoisServerFoundError,
+    SocketBadProxyError,
+    SocketError,
+    SocketTimeoutError,
+    TldsFileError,
+)
+
+
 ROOT_DIR = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 
 
@@ -226,34 +236,3 @@ class Url:
     def _suffix(self):
         return self.parsed_url.suffix
 
-
-class PoisError(Exception):
-    pass
-
-
-class IDNAError(PoisError):
-    pass
-
-
-class TldsFileError(PoisError):
-    pass
-
-
-class BadDomainError(PoisError):
-    pass
-
-
-class NoWhoisServerFoundError(PoisError):
-    pass
-
-
-class SocketError(PoisError):
-    pass
-
-
-class SocketTimeoutError(SocketError):
-    pass
-
-
-class SocketBadProxyError(SocketError):
-    pass
