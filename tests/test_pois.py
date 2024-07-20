@@ -1,10 +1,8 @@
-import socket
 import time
 
-import mock
 import pytest
-
-from pois import *
+import json
+from pois import Pois, NoWhoisServerFoundError
 
 
 class TestPois:

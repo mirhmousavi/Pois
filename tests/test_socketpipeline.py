@@ -1,9 +1,6 @@
-import socket
-
-import mock
 import pytest
 
-from pois import *
+from pois import SocketPipeline, SocketError, SocketTimeoutError
 
 
 class TestSocketPipeline:
